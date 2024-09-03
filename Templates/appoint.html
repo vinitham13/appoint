@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .appointment-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .appointment-item {
+            flex: 1 1 calc(33% - 10px);
+            background: #fafafa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, textarea {
+            width: 100%;
+            border: 1px solid #ddd;
+            padding: 8px;
+            border-radius: 4px;
+            background: #fff;
+            color: #333;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 80px;
+            resize: none;
+        }
+        button {
+            background: #d9534f;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #c9302c;
+        }
+        .delete-form {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Appointment Data</h1>
+        <h2>All Appointments:</h2>
+        {% csrf_token %}
+        <div class="appointment-list">
+            {% for item in data %}
+                <form method="GET" action="./update">
+                    <div class="appointment-item">
+                        <input type="hidden" name="appointment_id" value="{{ item.id }}">
+
+                        <label for="fname_{{ item.id }}">First Name:</label>
+                        <input type="text" id="fname_{{ item.id }}" name="fname" value="{{ item.fname }}" readonly>
+
+                        <label for="email_{{ item.id }}">Email:</label>
+                        <input type="email" id="email_{{ item.id }}" name="email" value="{{ item.email }}" readonly>
+
+                        <label for="mobi_{{ item.id }}">Mobile:</label>
+                        <input type="text" id="mobi_{{ item.id }}" name="mobi" value="{{ item.mobi }}" readonly>
+
+                        <label for="doct_{{ item.id }}">Doctor:</label>
+                        <input type="text" id="doct_{{ item.id }}" name="doct" value="{{ item.doct }}" readonly>
+
+                        <label for="choosedate_{{ item.id }}">Date:</label>
+                        <input type="text" id="choosedate_{{ item.id }}" name="choosedate" value="{{ item.choosedate }}" readonly>
+
+                        <label for="choosetime_{{ item.id }}">Time:</label>
+                        <input type="text" id="choosetime_{{ item.id }}" name="choosetime" value="{{ item.choosetime }}" readonly>
+
+                        <label for="textar_{{ item.id }}">Description:</label>
+                        <textarea id="textar_{{ item.id }}" name="textar" readonly>{{ item.textar }}</textarea>
+
+                        <div class="delete-form">
+                            {% csrf_token %}
+                            <button type="submit" name="delete">Delete</button>
+                        </div>
+                    </div>
+                </form>
+            {% empty %}
+                <div>No appointments found.</div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
